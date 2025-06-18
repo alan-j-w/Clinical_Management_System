@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'CMSapp',
     'Administrator',
     'Doctor',
@@ -83,9 +84,11 @@ WSGI_APPLICATION = 'CMSproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cmd_db',
+
+        'NAME': 'cms_db',
         'USER': 'root',
-        'PASSWORD': 'faith',
+        'PASSWORD': 'Root1234',
+
         'HOST': 'localhost',
         'PORT': 3306
     }
@@ -102,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
-    {
+
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {

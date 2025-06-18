@@ -1,0 +1,10 @@
+env/
+# Byte-compiled / optimized / DLL files
+pycache/
+**/pycache/
+*.py[cod]
+*.so
+
+# Django migration files
+**/migrations/
+!/migrations/init.py  # optional: keep the __init.py file if needed
