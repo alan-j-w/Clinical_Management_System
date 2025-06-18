@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'Pharma',
     'Recept',
     'Authentication',
+
 ]
 
 MIDDLEWARE = [
