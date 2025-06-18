@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'CMSapp',
     'Administrator',
     'Doctor',
@@ -82,9 +83,9 @@ WSGI_APPLICATION = 'CMSproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cmsdb',
+        'NAME': 'cms_db',
         'USER': 'root',
-        'PASSWORD': 'admin123',
+        'PASSWORD': 'Root1234',
         'HOST': 'localhost',
         'PORT': 3306
     }
