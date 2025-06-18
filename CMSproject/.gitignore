@@ -1,0 +1,9 @@
+env/
+_pycache_/
+**/_pycache_/
+*.py[cod]
+*.so
+
+# Django migration files
+**/migrations/
+!/migrations/_init.py  # optional: keep the __init_.py file if needed

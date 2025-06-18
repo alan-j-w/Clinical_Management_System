@@ -97,7 +97,8 @@ class MedicinePrescription(models.Model):
     Dosage = models.CharField(max_length=50)
     Frequency = models.CharField(max_length=50)
     Duration = models.CharField(max_length=50)
-    AppointmentId = models.ForeignKey(Appointment, on_delete=models.CASCADE)
+    AppointmentId = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='cmsapp_prescriptions')
+
     IsActive = models.BooleanField(default=True)
 
 class Consultation(models.Model):
