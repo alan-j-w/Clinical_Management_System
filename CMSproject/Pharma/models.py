@@ -1,46 +1,47 @@
 from django.db import models
-from CMSapp.models import Appointment
-
-
-class Medicine(models.Model):
-    MedicineId = models.AutoField(primary_key=True)
-    MedicineName = models.CharField(max_length=100)
-    ManufacturingDate = models.DateField()
-    ExpiryDate = models.DateField()
-    Unit = models.CharField(max_length=50)
-    IsActive = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.MedicineName
-
-class MedicineStock(models.Model):
-    MedicineStockId = models.AutoField(primary_key=True)
-    StockInHand = models.IntegerField()
-    ReOrderLevel = models.IntegerField()
-    Purchase = models.IntegerField()
-    Issuance = models.IntegerField()
-    MedicineId = models.ForeignKey(Medicine, on_delete=models.CASCADE)
-    CreatedDate = models.DateField(auto_now_add=True)
-    IsActive = models.BooleanField(default=True)
+from django.utils import timezone
 
 class MedicineCategory(models.Model):
-    MedicineCategoryId = models.AutoField(primary_key=True)
-    MedicineCategoryName = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.MedicineCategoryName
-    
+    def _str_(self):
+        return self.name
+
+class Medicine(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('expired', 'Expired'),
+        ('inactive', 'Inactive'),
+    ]
+    name = models.CharField(max_length=100)
+    category = models.ForeignKey(MedicineCategory, on_delete=models.CASCADE)
+    manufacturing_date = models.DateField()
+    expiry_date = models.DateField()
+    unit = models.CharField(max_length=20)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
+    is_active = models.BooleanField(default=True)
+
+    def update_status(self):
+        if self.expiry_date < timezone.now().date():
+            self.status = 'expired'
+            self.save()
+
+    def _str_(self):
+        return f"{self.name} - {self.status}"
+
+class MedicineStock(models.Model):
+    medicine = models.OneToOneField(Medicine, on_delete=models.CASCADE)
+    stock_in_hand = models.IntegerField()
+    reorder_level = models.IntegerField()
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def is_low_stock(self):
+        return self.stock_in_hand <= self.reorder_level
 
 class MedicinePrescription(models.Model):
-    MedicinePrescriptionId = models.AutoField(primary_key=True)
-    MedicineId = models.ForeignKey(Medicine, on_delete=models.CASCADE)
-    Dosage = models.CharField(max_length=50)
-    Frequency = models.CharField(max_length=50)
-    Duration = models.CharField(max_length=50)
-    AppointmentId = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='pharma_prescriptions')
-
- # Change this if you use Appointment model
-    IsActive = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f"Prescription {self.MedicinePrescriptionId} for {self.MedicineId.MedicineName}"
+    appointment_id = models.IntegerField()  # ForeignKey if appointments are implemented
+    medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)
+    dosage = models.CharField(max_length=100)
+    frequency = models.CharField(max_length=50)
+    duration = models.CharField(max_length=50)
+    is_active = models.BooleanField(default=True)
